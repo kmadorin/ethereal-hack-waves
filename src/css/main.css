@@ -1,0 +1,97 @@
+body,
+html {
+  height: 100%;
+}
+
+.page__wrapper {
+  height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.waves-icon {
+  width: 20px;
+  height: 20px;
+  background-color: #1f5af6;
+  display: inline-block;
+  transform: rotate(45deg);
+}
+
+.m-header {
+  text-align: center;
+  padding: 30px 15px;
+  margin-bottom: 30px;
+}
+
+.m-main__container {
+  text-align: center;
+}
+.m-main__link {
+  width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  text-decoration: none;
+}
+.m-main__link:hover {
+  text-decoration: none;
+}
+
+/* leaser page */
+.keeper__welcome {
+  max-width: 510px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
+.app--success .keeper {
+  display: none;
+}
+
+.app .offices {
+  display: none;
+}
+
+.app--success .offices {
+  display: flex;
+  align-items: stretch;
+}
+
+.office--first {
+  display: none;
+}
+
+.app--office-added .office--first {
+  display: block;
+}
+
+.office img {
+  width: 100%;
+  height: auto;
+}
+.office {
+  height: 100%;
+}
+
+.office--add img {
+  display: inline-block;
+  height: 232px;
+  width: 232px;
+}
+
+.office__img {
+  text-align: center;
+}
+
+.offices-header {
+  padding-bottom: 110px;
+  text-align: center;
+}
+
+.office__chars {
+  text-align: left;
+}
+.office__heading {
+  text-align: center;
+}

@@ -1,0 +1,47 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+@Callable(i)
+func init(name:String, photo:String, price:Int, tokenId:String) = {
+   WriteSet([DataEntry("name", name),DataEntry("photo", photo),DataEntry("price", price),DataEntry("token", tokenId),DataEntry("owner", toBase58String(i.caller.bytes))]) 
+}
+
+@Callable(i)
+func buyToken() = {
+    let pmt = extract(i.payment)
+    let receivedPayment = match (i.payment) {
+        case p:AttachedPayment => p.amount
+        case _ => 0
+    }
+    let price = getIntegerValue(this, "price")
+    let tokenId = getStringValue(this, "token")
+    if (isDefined(pmt.assetId)) then {
+        throw("waves only accepted")
+    } else if (receivedPayment >= price) then {
+        TransferSet([ScriptTransfer(i.caller, 1, fromBase58String(tokenId)),ScriptTransfer(i.caller, receivedPayment-price, unit)])
+    } else {
+        throw("not enough waves to buy the token")
+    }
+}
+
+@Callable(i)
+func activateAccess() = {
+    let pmt = i.payment
+    if isDefined(pmt) then {
+        let extractedPmt = extract(pmt)
+        let tokenId = getStringValue(this, "token")
+        if (isDefined(extractedPmt.assetId) && toBase58String(extract(extractedPmt.assetId)) == tokenId && extractedPmt.amount==1) then {
+            WriteSet([DataEntry("renter", toBase58String(i.caller.bytes))])
+        } else {
+            throw("payment error, you need to send 1 token")
+        }
+    } else {
+        throw("no payment attached")
+    } 
+}
+
+@Verifier(tx)
+func verify() = true
+
+

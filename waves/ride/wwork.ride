@@ -1,0 +1,18 @@
+# In this example multiple accounts can deposit their funds and safely take them back, no one can interfere with this.
+# An inner state is maintained as mapping `address=>waves`.
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+@Callable(i)
+func addOffice(officeAddress:String) = {
+    let officeOwnerAddress = i.caller.bytes.toBase58String()
+    if (!isDefined(getString(this,officeAddress))) then {
+        WriteSet([DataEntry(officeAddress, officeOwnerAddress)])     
+    } else {
+       throw("office with this Address has been already added") 
+    } 
+}
+
+@Verifier(tx)
+func verify() = true

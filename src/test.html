@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="setWWorkBtn">Set WWork Script</button>
+    <button id="keeperBtn">Login</button>
+    <button id="send">Issue Token</button>
+    <button id="setupOfficeBtn">Setup Office</button>
+    <button id="registerOfficeBtn">Register Office</button>
+    <button id="transferBtn">Transfer</button>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="js/ts-crypto.js"></script>
+    <script>
+      const wvs = 10 ** 8;
+      const appData = {};
+      const newOfficeSeed = wc.randomSeed();
+      const newOfficeAddress = wc.address(newOfficeSeed, "T");
+      const officeScript =
+        "base64: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";
+      const transactions = {
+        issue: {
+          type: 3,
+          data: {
+            name: "ROOffice1",
+            description: "Red october office token",
+            quantity: 10,
+            precision: 0,
+            reissuable: true,
+            fee: {
+              tokens: "1",
+              assetId: "WAVES"
+            }
+          }
+        },
+        transfer: {
+          type: 4,
+          data: {
+            amount: { tokens: "0.005", assetId: "WAVES" },
+            fee: { tokens: "0.001", assetId: "WAVES" },
+            recipient: "3MxDBraazCbuCgf8uqG8LcsUvXqzPGhRR2s"
+          }
+        },
+        transferBeforeOfficeSetup: {
+          type: 4,
+          data: {
+            amount: { tokens: "0.01", assetId: "WAVES" },
+            fee: { tokens: "0.001", assetId: "WAVES" },
+            recipient: newOfficeAddress
+          }
+        },
+        setWWorkScript: {
+          type: 13,
+          data: {
+            script:
+              "base64:AAIDAAAAAAAAAAAAAAAAAAAAAQAAAAFpAQAAAAlhZGRPZmZpY2UAAAABAAAADW9mZmljZUFkZHJlc3MEAAAAEm9mZmljZU93bmVyQWRkcmVzcwkAAlgAAAABCAgFAAAAAWkAAAAGY2FsbGVyAAAABWJ5dGVzAwkBAAAAASEAAAABCQEAAAAJaXNEZWZpbmVkAAAAAQkABB0AAAACBQAAAAR0aGlzBQAAAA1vZmZpY2VBZGRyZXNzCQEAAAAIV3JpdGVTZXQAAAABCQAETAAAAAIJAQAAAAlEYXRhRW50cnkAAAACBQAAAA1vZmZpY2VBZGRyZXNzBQAAABJvZmZpY2VPd25lckFkZHJlc3MFAAAAA25pbAkAAAIAAAABAgAAAC9vZmZpY2Ugd2l0aCB0aGlzIEFkZHJlc3MgaGFzIGJlZW4gYWxyZWFkeSBhZGRlZAAAAAEAAAACdHgBAAAABnZlcmlmeQAAAAAGia00lg==",
+            fee: {
+              tokens: "0.04",
+              assetId: "WAVES"
+            }
+          }
+        },
+        setupOfficeScript: {
+          type: 13,
+          data: {
+            script:
+              "base64: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",
+            fee: {
+              tokens: "0.04",
+              assetId: "WAVES"
+            }
+          }
+        },
+        addOffice: {
+          type: 16,
+          data: {
+            fee: {
+              tokens: "0.05",
+              assetId: "WAVES"
+            },
+            dApp: "3MxDBraazCbuCgf8uqG8LcsUvXqzPGhRR2s",
+            call: {
+              function: "addOffice",
+              args: [
+                {
+                  type: "string",
+                  value: "3MxDBraazCbuCgf8uqG8LcsUvXqzPGhRR2s"
+                }
+              ]
+            }
+          }
+        }
+      };
+      document.addEventListener("DOMContentLoaded", e => {
+        const sendBtn = document.getElementById("send");
+        const authBtn = document.getElementById("keeperBtn");
+        const transferBtn = document.getElementById("transferBtn");
+        const setWWorkBtn = document.getElementById("setWWorkBtn");
+        const setupOfficeBtn = document.getElementById("setupOfficeBtn");
+
+        sendBtn.addEventListener("click", () => {
+          WavesKeeper.signAndPublishTransaction(transactions["issue"])
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
+        });
+
+        authBtn.addEventListener("click", e => {
+          window.WavesKeeper.initialPromise
+            .then(function() {
+              return window.WavesKeeper.publicState();
+            })
+            .then(state => {
+              console.log(state);
+            });
+        });
+
+        transferBtn.addEventListener("click", e => {
+          WavesKeeper.signAndPublishTransaction(transactions["transfer"])
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
+        });
+
+        setWWorkBtn.addEventListener("click", e => {
+          WavesKeeper.signAndPublishTransaction(transactions["setWWorkScript"])
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
+        });
+
+        setupOfficeBtn.addEventListener("click", e => {
+          WavesKeeper.signAndPublishTransaction({
+            type: 3,
+            data: {
+              name: "ROOffice1",
+              description: "Red october office token",
+              quantity: 10,
+              precision: 0,
+              reissuable: true,
+              fee: {
+                tokens: "1",
+                assetId: "WAVES"
+              }
+            }
+          })
+            .then(res => {
+              appData.officeToken = JSON.parse(res).assetId;
+              return WavesKeeper.signAndPublishTransaction(
+                transactions["transferBeforeOfficeSetup"]
+              );
+            })
+            .then(res => {
+              return wt.waitForTx(JSON.parse(res).id, {
+                apiBase: "https://testnodes.wavesnodes.com"
+              });
+            })
+            .then(res => {
+              const officeSsTx = wt.setScript(
+                { script: officeScript, chainId: 84 },
+                newOfficeSeed
+              );
+              return wt.broadcast(
+                officeSsTx,
+                "https://testnodes.wavesnodes.com"
+              );
+            })
+            .then(res => {
+              appData.officeAddress = res.sender;
+              return wt.waitForTx(res.id, {
+                apiBase: "https://testnodes.wavesnodes.com"
+              });
+            })
+            .then(res => {
+              return WavesKeeper.signAndPublishTransaction({
+                type: 16,
+                data: {
+                  fee: {
+                    tokens: "0.05",
+                    assetId: "WAVES"
+                  },
+                  dApp: "3MxDBraazCbuCgf8uqG8LcsUvXqzPGhRR2s",
+                  call: {
+                    function: "addOffice",
+                    args: [
+                      {
+                        type: "string",
+                        value: res.sender
+                      }
+                    ]
+                  },
+                  payment: []
+                }
+              });
+            })
+            .then(res => {
+              console.log(appData);
+              return WavesKeeper.signAndPublishTransaction({
+                type: 16,
+                data: {
+                  fee: {
+                    tokens: "0.05",
+                    assetId: "WAVES"
+                  },
+                  dApp: appData.officeAddress,
+                  call: {
+                    function: "init",
+                    args: [
+                      { type: "string", value: "Red October" },
+                      {
+                        type: "string",
+                        value: "https://s.inyourpocket.com/gallery/190542.jpg"
+                      },
+                      {
+                        type: "integer",
+                        value: 0.1 * wvs
+                      },
+                      {
+                        type: "string",
+                        value: appData.officeToken
+                      }
+                    ]
+                  },
+                  payment: []
+                }
+              });
+            })
+            .catch(error => console.log(error));
+        });
+      });
+    </script>
+  </body>
+</html>
