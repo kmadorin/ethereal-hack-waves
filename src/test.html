@@ -16,8 +16,8 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="js/ts-crypto.js"></script>
     <script>
-      const wvs = 10 ** 8;
       const appData = {};
+      const wvs = 10 ** 8;
       const newOfficeSeed = wc.randomSeed();
       const newOfficeAddress = wc.address(newOfficeSeed, "T");
       const officeScript =
